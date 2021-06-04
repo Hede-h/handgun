@@ -32,6 +32,8 @@ public class GameManager : SpawnPlayer
     public Text timeToStart_txt;
     [Header("SceneManager")]
     public string sceneTarget;
+    private GameObject managerObj;
+    public Scene targetScene;
 
     void Awake()
     {
@@ -188,13 +190,13 @@ public class GameManager : SpawnPlayer
                             DontDestroyOnLoad(dontDestroyObjects[i]);
                             SceneController.SceneToGo(sceneTarget);
                             Debug.Log("Loading Users: Count: " + playerCount + " | " + "Indo para cena: " + sceneTarget);
-                            LoadingUsers(playerCount);
                             SetStateGame(STATE_GAME.SPAWNPLAYER);
                             if (!CooldownManager.IsExpired("ClearLog", "log"))
                             {
                                 return;
                             }
-                            CooldownManager.AddCooldown("ClearLog", "log", 2000);
+                            CooldownManager.AddCooldown("ClearLog", "log", 10000);
+                            LoadingUsers(playerCount);
                             //ClearLog();
                         }
                     }
@@ -223,6 +225,7 @@ public class GameManager : SpawnPlayer
         AddNewUser(userCount);
         if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
         {
+            SceneManager.MoveGameObjectToScene(managerObj, targetScene);
             SetupSpawn(users);
         }
 
